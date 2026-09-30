@@ -32,7 +32,21 @@ codex plugin marketplace add ./plugins
 codex plugin add agent-msg@agent-msg-local
 ```
 
-Restart sessions after installation. The plugin bundles the Python code and a skill-local launcher; pip installation is not required. Its skill resolves that launcher directly rather than relying on PATH.
+The plugin bundles the Python code and a skill-local launcher; pip installation is not required. Its skill resolves that launcher directly rather than relying on PATH. Plugin installation does not add `agent-msg` to your terminal's PATH; install the Python package below for that command.
+
+#### Load into a running session
+
+In **Claude Code**, type this directly into each running session after installing or updating the plugin:
+
+```text
+/reload-plugins
+```
+
+This applies pending plugin changes without restarting. Check the reload summary for errors. It reloads all active plugins; if it warns about MCP tool changes, review the warning before using `--force`. For a standalone skill installation, use `/reload-skills`. These are in-session commands, not shell commands. See [Claude's command reference](https://code.claude.com/docs/en/commands).
+
+In **Codex**, use `/plugins` to inspect installation and enabled state. There is no equivalent reload slash command documented in the current [CLI reference](https://learn.chatgpt.com/docs/developer-commands?surface=cli). If the skill is unavailable, restart the CLI and resume your conversation with `codex resume`; for local plugin file changes in the desktop app, OpenAI documents an [app restart](https://developers.openai.com/plugins/build/plugins).
+
+Codex's [app-server API](https://learn.chatgpt.com/docs/app-server) supports `skills/list` with `forceReload: true` and emits `skills/changed` notifications. That refreshes skill discovery; it is not a documented full-plugin reload command for CLI users.
 
 ### Python package
 
