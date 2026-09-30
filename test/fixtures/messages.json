@@ -1,0 +1,532 @@
+[
+  {
+    "version": 1,
+    "id": "965414b9-993b-4a29-b9ef-b67a6c115940",
+    "created_at": "2026-09-30T20:59:10.199Z",
+    "from": {
+      "harness": "codex",
+      "name": "atlas",
+      "thread_id": "sample-codex-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "to": {
+      "harness": "claude",
+      "name": "mira",
+      "thread_id": "sample-claude-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "msg": "Can you review the parser change?",
+    "reply_route": {
+      "kind": "agent-msg",
+      "request_id": "965414b9-993b-4a29-b9ef-b67a6c115940",
+      "notify": null
+    },
+    "in_reply_to": null,
+    "seq": 1,
+    "status": "sent",
+    "observed": {
+      "pid": 400,
+      "ppid": 300,
+      "uid": 501,
+      "cwd": "/demo/project",
+      "executable": "/usr/bin/python3",
+      "ancestors": [
+        {
+          "pid": 300,
+          "executable": "/usr/bin/example"
+        }
+      ],
+      "identity_source": "environment-claim",
+      "synthetic": true
+    },
+    "deliveries": [
+      {
+        "status": "sent",
+        "transport": "sample",
+        "created_at": "2026-09-30T20:59:10.199Z",
+        "detail": {
+          "synthetic": true
+        }
+      }
+    ]
+  },
+  {
+    "version": 1,
+    "id": "a39c95b7-216c-4913-978c-1b5c59aa5f2d",
+    "created_at": "2026-09-30T20:59:10.199Z",
+    "from": {
+      "harness": "claude",
+      "name": "mira",
+      "thread_id": "sample-claude-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "to": {
+      "harness": "codex",
+      "name": "atlas",
+      "thread_id": "sample-codex-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "msg": "Review complete. Two boundary cases need tests.",
+    "reply_route": {
+      "kind": "agent-msg",
+      "request_id": "a39c95b7-216c-4913-978c-1b5c59aa5f2d",
+      "notify": null
+    },
+    "in_reply_to": "965414b9-993b-4a29-b9ef-b67a6c115940",
+    "seq": 2,
+    "status": "sent",
+    "observed": {
+      "pid": 401,
+      "ppid": 300,
+      "uid": 501,
+      "cwd": "/demo/project",
+      "executable": "/usr/bin/python3",
+      "ancestors": [
+        {
+          "pid": 300,
+          "executable": "/usr/bin/example"
+        }
+      ],
+      "identity_source": "process-tree",
+      "synthetic": true
+    },
+    "deliveries": [
+      {
+        "status": "sent",
+        "transport": "sample",
+        "created_at": "2026-09-30T20:59:10.199Z",
+        "detail": {
+          "synthetic": true
+        }
+      }
+    ]
+  },
+  {
+    "version": 1,
+    "id": "4782acf7-7ade-4e09-bb3b-7f942c352c2d",
+    "created_at": "2026-09-30T20:59:10.199Z",
+    "from": {
+      "harness": "codex",
+      "name": "atlas",
+      "thread_id": "sample-codex-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "to": {
+      "harness": "claude",
+      "name": "mira",
+      "thread_id": "sample-claude-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "msg": "Added the cases. All tests pass.",
+    "reply_route": {
+      "kind": "agent-msg",
+      "request_id": "4782acf7-7ade-4e09-bb3b-7f942c352c2d",
+      "notify": null
+    },
+    "in_reply_to": "a39c95b7-216c-4913-978c-1b5c59aa5f2d",
+    "seq": 3,
+    "status": "received",
+    "observed": {
+      "pid": 402,
+      "ppid": 300,
+      "uid": 501,
+      "cwd": "/demo/project",
+      "executable": "/usr/bin/python3",
+      "ancestors": [
+        {
+          "pid": 300,
+          "executable": "/usr/bin/example"
+        }
+      ],
+      "identity_source": "environment-claim",
+      "synthetic": true
+    },
+    "deliveries": [
+      {
+        "status": "received",
+        "transport": "sample",
+        "created_at": "2026-09-30T20:59:10.199Z",
+        "detail": {
+          "synthetic": true
+        }
+      }
+    ]
+  },
+  {
+    "version": 1,
+    "id": "757fe41a-578b-4ec8-9e9e-91ad3d488592",
+    "created_at": "2026-09-30T20:59:10.199Z",
+    "from": {
+      "harness": "claude",
+      "name": "mira",
+      "thread_id": "sample-claude-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "to": {
+      "harness": "codex",
+      "name": "atlas",
+      "thread_id": "sample-codex-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "msg": "Here is the latest design note.",
+    "reply_route": {
+      "kind": "agent-msg",
+      "request_id": "757fe41a-578b-4ec8-9e9e-91ad3d488592",
+      "notify": null
+    },
+    "in_reply_to": null,
+    "seq": 4,
+    "status": "sent",
+    "observed": {
+      "pid": 403,
+      "ppid": 300,
+      "uid": 501,
+      "cwd": "/demo/project",
+      "executable": "/usr/bin/python3",
+      "ancestors": [
+        {
+          "pid": 300,
+          "executable": "/usr/bin/example"
+        }
+      ],
+      "identity_source": "process-tree",
+      "synthetic": true
+    },
+    "deliveries": [
+      {
+        "status": "sent",
+        "transport": "sample",
+        "created_at": "2026-09-30T20:59:10.199Z",
+        "detail": {
+          "synthetic": true
+        }
+      }
+    ]
+  },
+  {
+    "version": 1,
+    "id": "2e767fad-9544-4aa1-ad91-3f33f02fde37",
+    "created_at": "2026-09-30T20:59:10.199Z",
+    "from": {
+      "harness": "codex",
+      "name": "atlas",
+      "thread_id": "sample-codex-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "to": {
+      "harness": "claude",
+      "name": "mira",
+      "thread_id": "sample-claude-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "msg": "The peer exited before dispatch.",
+    "reply_route": {
+      "kind": "agent-msg",
+      "request_id": "2e767fad-9544-4aa1-ad91-3f33f02fde37",
+      "notify": null
+    },
+    "in_reply_to": null,
+    "seq": 5,
+    "status": "failed",
+    "observed": {
+      "pid": 404,
+      "ppid": 300,
+      "uid": 501,
+      "cwd": "/demo/project",
+      "executable": "/usr/bin/python3",
+      "ancestors": [
+        {
+          "pid": 300,
+          "executable": "/usr/bin/example"
+        }
+      ],
+      "identity_source": "environment-claim",
+      "synthetic": true
+    },
+    "deliveries": [
+      {
+        "status": "failed",
+        "transport": "sample",
+        "created_at": "2026-09-30T20:59:10.199Z",
+        "detail": {
+          "synthetic": true
+        }
+      }
+    ]
+  },
+  {
+    "version": 1,
+    "id": "27c14f19-4e4c-4ab0-a57e-f8c9594e18b8",
+    "created_at": "2026-09-30T20:59:10.199Z",
+    "from": {
+      "harness": "claude",
+      "name": "mira",
+      "thread_id": "sample-claude-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "to": {
+      "harness": "codex",
+      "name": "atlas",
+      "thread_id": "sample-codex-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "msg": "Connection lost; delivery cannot be confirmed.",
+    "reply_route": {
+      "kind": "agent-msg",
+      "request_id": "27c14f19-4e4c-4ab0-a57e-f8c9594e18b8",
+      "notify": null
+    },
+    "in_reply_to": null,
+    "seq": 6,
+    "status": "uncertain",
+    "observed": {
+      "pid": 405,
+      "ppid": 300,
+      "uid": 501,
+      "cwd": "/demo/project",
+      "executable": "/usr/bin/python3",
+      "ancestors": [
+        {
+          "pid": 300,
+          "executable": "/usr/bin/example"
+        }
+      ],
+      "identity_source": "process-tree",
+      "synthetic": true
+    },
+    "deliveries": [
+      {
+        "status": "uncertain",
+        "transport": "sample",
+        "created_at": "2026-09-30T20:59:10.199Z",
+        "detail": {
+          "synthetic": true
+        }
+      }
+    ]
+  },
+  {
+    "version": 1,
+    "id": "c70bbcd7-3a61-4a08-9589-6dc8cb4a202a",
+    "created_at": "2026-09-30T20:59:10.199Z",
+    "from": {
+      "harness": "codex",
+      "name": "atlas",
+      "thread_id": "sample-codex-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "to": {
+      "harness": "claude",
+      "name": "mira",
+      "thread_id": "sample-claude-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "msg": "Working on the integration check.",
+    "reply_route": {
+      "kind": "agent-msg",
+      "request_id": "c70bbcd7-3a61-4a08-9589-6dc8cb4a202a",
+      "notify": null
+    },
+    "in_reply_to": null,
+    "seq": 7,
+    "status": "dispatching",
+    "observed": {
+      "pid": 406,
+      "ppid": 300,
+      "uid": 501,
+      "cwd": "/demo/project",
+      "executable": "/usr/bin/python3",
+      "ancestors": [
+        {
+          "pid": 300,
+          "executable": "/usr/bin/example"
+        }
+      ],
+      "identity_source": "environment-claim",
+      "synthetic": true
+    },
+    "deliveries": [
+      {
+        "status": "dispatching",
+        "transport": "sample",
+        "created_at": "2026-09-30T20:59:10.199Z",
+        "detail": {
+          "synthetic": true
+        }
+      }
+    ]
+  },
+  {
+    "version": 1,
+    "id": "5aeb24df-b170-457d-bac7-b48a068270dc",
+    "created_at": "2026-09-30T20:59:10.199Z",
+    "from": {
+      "harness": "claude",
+      "name": "mira",
+      "thread_id": "sample-claude-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "to": {
+      "harness": "codex",
+      "name": "atlas",
+      "thread_id": "sample-codex-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "msg": "Queued locally for dispatch inspection (synthetic fixture).",
+    "reply_route": {
+      "kind": "agent-msg",
+      "request_id": "5aeb24df-b170-457d-bac7-b48a068270dc",
+      "notify": null
+    },
+    "in_reply_to": null,
+    "seq": 8,
+    "status": "prepared",
+    "observed": {
+      "pid": 407,
+      "ppid": 300,
+      "uid": 501,
+      "cwd": "/demo/project",
+      "executable": "/usr/bin/python3",
+      "ancestors": [
+        {
+          "pid": 300,
+          "executable": "/usr/bin/example"
+        }
+      ],
+      "identity_source": "process-tree",
+      "synthetic": true
+    },
+    "deliveries": [
+      {
+        "status": "prepared",
+        "transport": "sample",
+        "created_at": "2026-09-30T20:59:10.199Z",
+        "detail": {
+          "synthetic": true
+        }
+      }
+    ]
+  },
+  {
+    "version": 1,
+    "id": "21f2b81c-df94-4a0d-9006-30d55a3c9e75",
+    "created_at": "2026-09-30T20:59:10.199Z",
+    "from": {
+      "harness": "codex",
+      "name": "atlas",
+      "thread_id": "sample-codex-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "to": {
+      "harness": "claude",
+      "name": "mira",
+      "thread_id": "sample-claude-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "msg": "A journal-only reply, without waking the sender.",
+    "reply_route": {
+      "kind": "agent-msg",
+      "request_id": "21f2b81c-df94-4a0d-9006-30d55a3c9e75",
+      "notify": null
+    },
+    "in_reply_to": null,
+    "seq": 9,
+    "status": "received",
+    "observed": {
+      "pid": 408,
+      "ppid": 300,
+      "uid": 501,
+      "cwd": "/demo/project",
+      "executable": "/usr/bin/python3",
+      "ancestors": [
+        {
+          "pid": 300,
+          "executable": "/usr/bin/example"
+        }
+      ],
+      "identity_source": "environment-claim",
+      "synthetic": true
+    },
+    "deliveries": [
+      {
+        "status": "received",
+        "transport": "sample",
+        "created_at": "2026-09-30T20:59:10.199Z",
+        "detail": {
+          "synthetic": true
+        }
+      }
+    ]
+  },
+  {
+    "version": 1,
+    "id": "67fee748-f1fb-4124-acdc-c1b4517a4b4e",
+    "created_at": "2026-09-30T20:59:10.199Z",
+    "from": {
+      "harness": "claude",
+      "name": "mira",
+      "thread_id": "sample-claude-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "to": {
+      "harness": "codex",
+      "name": "atlas",
+      "thread_id": "sample-codex-session",
+      "cwd": "/demo/project",
+      "pid": null
+    },
+    "msg": "Literal content: <script>alert(\"not executable\")</script> & a\nsecond line.",
+    "reply_route": {
+      "kind": "agent-msg",
+      "request_id": "67fee748-f1fb-4124-acdc-c1b4517a4b4e",
+      "notify": null
+    },
+    "in_reply_to": null,
+    "seq": 10,
+    "status": "sent",
+    "observed": {
+      "pid": 409,
+      "ppid": 300,
+      "uid": 501,
+      "cwd": "/demo/project",
+      "executable": "/usr/bin/python3",
+      "ancestors": [
+        {
+          "pid": 300,
+          "executable": "/usr/bin/example"
+        }
+      ],
+      "identity_source": "process-tree",
+      "synthetic": true
+    },
+    "deliveries": [
+      {
+        "status": "sent",
+        "transport": "sample",
+        "created_at": "2026-09-30T20:59:10.199Z",
+        "detail": {
+          "synthetic": true
+        }
+      }
+    ]
+  }
+]

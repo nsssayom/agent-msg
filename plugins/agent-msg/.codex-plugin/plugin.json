@@ -1,0 +1,10 @@
+{
+  "name": "agent-msg",
+  "version": "0.1.0",
+  "author": {
+    "name": "nsssayom"
+  },
+  "repository": "https://github.com/nsssayom/agent-msg",
+  "description": "Local, journaled messages between Claude Code and Codex agents.",
+  "skills": "./skills/"
+}

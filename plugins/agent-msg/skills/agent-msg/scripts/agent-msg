@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+"""Run the bundled package without pip or network setup."""
+from pathlib import Path
+import sys
+if sys.version_info < (3, 10):
+    raise SystemExit("agent-msg requires Python 3.10+; invoke this launcher with a supported interpreter.")
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "lib"))
+from agent_msg.cli import main
+raise SystemExit(main())

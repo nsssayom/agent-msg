@@ -1,0 +1,4 @@
+include README.md
+recursive-include test *.py
+recursive-include test/fixtures *.json
+prune test/results

@@ -1,0 +1,16 @@
+{
+  "name": "agent-msg-local",
+  "owner": {
+    "name": "nsssayom"
+  },
+  "plugins": [
+    {
+      "name": "agent-msg",
+      "source": "./agent-msg",
+      "description": "Local cross-harness messaging with a durable journal."
+    }
+  ],
+  "metadata": {
+    "description": "Local agent-msg plugin marketplace."
+  }
+}

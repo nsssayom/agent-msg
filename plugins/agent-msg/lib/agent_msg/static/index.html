@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>agent-msg journal</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="bar">
+    <div class="brand-mark" aria-hidden="true">↔</div><div><h1>agent-msg <span>journal</span></h1><p class="tagline">Local conversations. A clear record.</p></div>
+    <p id="stats" class="stats" aria-live="polite">Connecting…</p><button id="refresh" class="refresh" type="button" aria-pressed="true">● Live</button><span class="read-only">Read only · localhost</span>
+  </header>
+
+  <main class="layout">
+    <section class="inbox" aria-label="Messages">
+      <div class="section-label">ACTIVITY <span id="count"></span></div><form id="filters" class="filters" role="search">
+        <label class="sr-only" for="q">Search messages</label>
+        <input id="q" name="q" type="search" placeholder="Search text or agent name" autocomplete="off">
+        <div class="filter-row">
+          <label class="sr-only" for="peer">Agent</label>
+          <select id="peer" name="peer"><option value="">All agents</option></select>
+          <label class="sr-only" for="status">Status</label>
+          <select id="status" name="status">
+            <option value="">Any status</option>
+            <option value="prepared">Prepared</option><option value="dispatching">Dispatching</option>
+            <option value="sent">Sent</option>
+            <option value="received">Reply recorded</option>
+            <option value="uncertain">Uncertain</option>
+            <option value="failed">Failed</option>
+          </select>
+        </div>
+      </form>
+      <ol id="list" class="list" aria-label="Messages, newest first"></ol>
+      <button id="older" class="older" type="button" hidden>Load older messages</button>
+      <p id="list-note" class="note" hidden></p>
+    </section>
+
+    <section id="detail" class="detail" aria-label="Selected conversation" aria-live="polite">
+      <div class="empty-state"><div class="empty-glyph" aria-hidden="true">↔</div><h2>Every message has a story.</h2><p>Choose a message to follow its conversation,<br>inspect delivery, and see where it came from.</p></div>
+    </section>
+  </main>
+</body>
+</html>

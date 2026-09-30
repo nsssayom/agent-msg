@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-msg"
+version = "0.1.0"
+description = "Local, journaled messages between Claude Code and Codex sessions"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+authors = [{name = "nsssayom"}]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX",
+]
+
+[project.scripts]
+agent-msg = "agent_msg.cli:main"
+
+[project.urls]
+Repository = "https://github.com/nsssayom/agent-msg"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+agent_msg = ["static/*", "skill/SKILL.md", "skill/agents/*.yaml"]
