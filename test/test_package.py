@@ -177,6 +177,11 @@ class ServiceTests(unittest.TestCase):
         dest=Path(self.temp.name)/'plugin';cli.export_plugin(dest)
         for harness in ('claude','codex'):
             self.assertEqual(json.loads((dest/f'.{harness}-plugin/plugin.json').read_text())['name'],'agent-msg')
+        self.assertEqual((dest/'LICENSE').read_bytes(), (Path(cli.__file__).parent/'LICENSE').read_bytes())
+        interface=json.loads((dest/'.codex-plugin/plugin.json').read_text())['interface']
+        for field in ('logo','composerIcon'):
+            self.assertTrue((dest/interface[field]).is_file())
+        self.assertLessEqual(len(interface['shortDescription']),30)
         for source in Path(cli.__file__).parent.rglob('*.py'):
             self.assertEqual(source.read_bytes(), (dest/'lib/agent_msg'/source.relative_to(Path(cli.__file__).parent)).read_bytes())
         run=subprocess.run([sys.executable,str(dest/'skills/agent-msg/scripts/agent-msg'),'--version'],

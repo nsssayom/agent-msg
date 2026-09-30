@@ -8,6 +8,8 @@ version = "0.1.0"
 description = "Local, journaled messages between Claude Code and Codex sessions"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
 dependencies = []
 authors = [{name = "nsssayom"}]
 classifiers = [
@@ -21,9 +23,10 @@ agent-msg = "agent_msg.cli:main"
 
 [project.urls]
 Repository = "https://github.com/nsssayom/agent-msg"
+Issues = "https://github.com/nsssayom/agent-msg/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-agent_msg = ["static/*", "skill/SKILL.md", "skill/agents/*.yaml"]
+agent_msg = ["LICENSE", "static/*", "skill/SKILL.md", "skill/agents/*.yaml", "plugin_assets/*"]

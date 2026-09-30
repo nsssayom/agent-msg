@@ -72,9 +72,12 @@ def export_plugin(destination):
     target = Path(destination).expanduser().absolute()
     if target.exists():
         raise ValueError(f'plugin destination already exists: {target}')
-    metadata = {'name': 'agent-msg', 'version': __version__,
+    metadata = {'name': 'agent-msg', 'version': __version__, 'license': 'MIT',
                 'author': {'name': 'nsssayom'}, 'repository': 'https://github.com/nsssayom/agent-msg',
+                'homepage': 'https://github.com/nsssayom/agent-msg',
                 'description': 'Local, journaled messages between Claude Code and Codex agents.'}
+    assets = Path(__file__).parent / 'plugin_assets'
+    interface = json.loads((assets / 'interface.json').read_text())
     target.mkdir(parents=True)
     (target / 'plugin.json').write_text(json.dumps({
         '$schema': 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json', **metadata}, indent=2) + '\n')
@@ -84,7 +87,11 @@ def export_plugin(destination):
         manifest = dict(metadata)
         if harness == 'codex':
             manifest['skills'] = './skills/'
+            manifest['interface'] = interface
         (folder / 'plugin.json').write_text(json.dumps(manifest, indent=2) + '\n')
+    (target / 'assets').mkdir()
+    shutil.copyfile(assets / 'icon.svg', target / 'assets/icon.svg')
+    shutil.copyfile(Path(__file__).parent / 'LICENSE', target / 'LICENSE')
     shutil.copytree(Path(__file__).parent / 'skill', target / 'skills/agent-msg')
     shutil.copytree(Path(__file__).parent, target / 'lib/agent_msg',
                     ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))

@@ -1,0 +1,12 @@
+{
+  "name": "agent-msg",
+  "owner": {"name": "nsssayom"},
+  "metadata": {"description": "Local messaging between Claude Code and Codex sessions."},
+  "plugins": [
+    {
+      "name": "agent-msg",
+      "source": "./plugins/agent-msg",
+      "description": "Discover local agents, send messages, and inspect journaled replies."
+    }
+  ]
+}

@@ -22,15 +22,17 @@ Requires Python 3.10+, macOS or Linux, and running local Claude Code or Codex se
 
 ### Plugins
 
-This checkout includes a self-contained plugin and local marketplace:
+Install from the GitHub marketplace:
 
 ```sh
-claude plugin marketplace add ./plugins
-claude plugin install agent-msg@agent-msg-local
+claude plugin marketplace add nsssayom/agent-msg
+claude plugin install agent-msg@agent-msg
 
-codex plugin marketplace add ./plugins
-codex plugin add agent-msg@agent-msg-local
+codex plugin marketplace add nsssayom/agent-msg
+codex plugin add agent-msg@agent-msg
 ```
+
+For a local checkout, replace `nsssayom/agent-msg` with its absolute directory path. The earlier `./plugins` marketplace remains available as `agent-msg-local`; use one marketplace to avoid duplicate installs. This is a publisher-hosted marketplace, not an official-directory endorsement.
 
 The plugin bundles the Python code and a skill-local launcher; pip installation is not required. Its skill resolves that launcher directly rather than relying on PATH. Plugin installation does not add `agent-msg` to your terminal's PATH; install the Python package below for that command.
 
@@ -50,13 +52,27 @@ Codex's [app-server API](https://learn.chatgpt.com/docs/app-server) supports `sk
 
 ### Python package
 
+With [uv](https://docs.astral.sh/uv/), install the versioned release into an isolated environment and expose `agent-msg` on PATH:
+
+```sh
+uv tool install https://github.com/nsssayom/agent-msg/releases/download/v0.1.0/agent_msg-0.1.0-py3-none-any.whl
+agent-msg --version
+agent-msg ui
+```
+
+If uv reports that its executable directory is missing from PATH, run `uv tool update-shell` and open a new terminal. From a checkout, `uv tool install .` installs the current source instead.
+
+Alternatively, use Python's built-in virtual environment support from a checkout:
+
 ```sh
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install .
 ```
 
-For a standalone skill without the plugin, run `agent-msg skill install --harness both`. Use either the plugin or the standalone skill to avoid duplicates. No package has been published to PyPI yet.
+Activate that environment in each terminal where you want the command, or invoke `.venv/bin/agent-msg` directly. For a standalone skill without the plugin, run `agent-msg skill install --harness both`. Use either the plugin or the standalone skill to avoid duplicates. No package has been published to PyPI yet.
+
+Release archives and checksums are on [GitHub Releases](https://github.com/nsssayom/agent-msg/releases). The code is [MIT licensed](LICENSE). See [data handling](PRIVACY.md) for what is read, stored, and sent to the harnesses.
 
 ## Use
 
@@ -112,5 +128,7 @@ agent-msg plugin export ./new-plugin-directory
 ```
 
 `src/agent_msg/` is the canonical implementation. `plugins/agent-msg/` is a generated bundle; regenerate it after source changes. Tests live in `test/`. Live messaging tests require explicit environment opt-in; ordinary test runs do not contact agents. Browser checks in `test/ui_smoke.py` require Playwright only in the test environment.
+
+See [release preparation](docs/RELEASING.md) and [directory submission](docs/SUBMISSION.md) for distribution instructions.
 
 Exit codes: `0` success, `1` operation error, `2` invalid arguments, `3` reply timeout, `130` interrupted.
