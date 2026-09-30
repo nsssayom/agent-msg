@@ -91,6 +91,7 @@ def export_plugin(destination):
         (folder / 'plugin.json').write_text(json.dumps(manifest, indent=2) + '\n')
     (target / 'assets').mkdir()
     shutil.copyfile(assets / 'icon.svg', target / 'assets/icon.svg')
+    shutil.copyfile(assets / 'README.md', target / 'README.md')
     shutil.copyfile(Path(__file__).parent / 'LICENSE', target / 'LICENSE')
     shutil.copytree(Path(__file__).parent / 'skill', target / 'skills/agent-msg')
     shutil.copytree(Path(__file__).parent, target / 'lib/agent_msg',

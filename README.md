@@ -55,7 +55,7 @@ Codex's [app-server API](https://learn.chatgpt.com/docs/app-server) supports `sk
 With [uv](https://docs.astral.sh/uv/), install the versioned release into an isolated environment and expose `agent-msg` on PATH:
 
 ```sh
-uv tool install https://github.com/nsssayom/agent-msg/releases/download/v0.1.0/agent_msg-0.1.0-py3-none-any.whl
+uv tool install https://github.com/nsssayom/agent-msg/releases/download/v0.1.1/agent_msg-0.1.1-py3-none-any.whl
 agent-msg --version
 agent-msg ui
 ```

@@ -17,6 +17,7 @@ import uuid
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 from agent_msg import cli, protocol, service, transports
+from agent_msg import __version__
 from agent_msg.journal import Journal, default_path
 
 
@@ -178,6 +179,7 @@ class ServiceTests(unittest.TestCase):
         for harness in ('claude','codex'):
             self.assertEqual(json.loads((dest/f'.{harness}-plugin/plugin.json').read_text())['name'],'agent-msg')
         self.assertEqual((dest/'LICENSE').read_bytes(), (Path(cli.__file__).parent/'LICENSE').read_bytes())
+        self.assertEqual((dest/'README.md').read_bytes(), (Path(cli.__file__).parent/'plugin_assets/README.md').read_bytes())
         interface=json.loads((dest/'.codex-plugin/plugin.json').read_text())['interface']
         for field in ('logo','composerIcon'):
             self.assertTrue((dest/interface[field]).is_file())
@@ -186,7 +188,7 @@ class ServiceTests(unittest.TestCase):
             self.assertEqual(source.read_bytes(), (dest/'lib/agent_msg'/source.relative_to(Path(cli.__file__).parent)).read_bytes())
         run=subprocess.run([sys.executable,str(dest/'skills/agent-msg/scripts/agent-msg'),'--version'],
             cwd=self.temp.name,env={**os.environ,'PYTHONPATH':''},capture_output=True,text=True,check=True)
-        self.assertEqual(run.stdout.strip(),'0.1.0')
+        self.assertEqual(run.stdout.strip(),__version__)
         install=Path(self.temp.name)/'install';result=cli.install_skill('both',install)
         self.assertEqual(len(result['installed']),2)
         (Path(result['installed'][0])/'SKILL.md').write_text('customized')

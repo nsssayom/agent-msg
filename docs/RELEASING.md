@@ -41,7 +41,7 @@ Build tools below are development dependencies only.
    review are separate; follow [SUBMISSION.md](SUBMISSION.md).
 
 The root marketplace can be pinned to a tag in Codex with
-`codex plugin marketplace add nsssayom/agent-msg --ref v0.1.0`.
+`codex plugin marketplace add nsssayom/agent-msg --ref v0.1.1`.
 Users installing from the default branch follow the marketplace's current files.
 No PyPI release has been made; do not document `pip install agent-msg` as our
 distribution until ownership of that package name and publication are confirmed.

@@ -10,8 +10,8 @@ user's computer. Describe that requirement in every listing.
 - Repository: https://github.com/nsssayom/agent-msg
 - Plugin directory: `plugins/agent-msg/`
 - Marketplace: `.claude-plugin/marketplace.json` at the repository root
-- Version: `0.1.0` (initial alpha)
-- Download: `agent-msg-plugin-0.1.0.zip` from the matching GitHub release
+- Version: `0.1.1` (initial alpha)
+- Download: `agent-msg-plugin-0.1.1.zip` from the matching GitHub release
 - Listing text, prompts, icon paths: `src/agent_msg/plugin_assets/interface.json`
 - Data handling: [PRIVACY.md](../PRIVACY.md)
 - License: [LICENSE](../LICENSE)
@@ -25,13 +25,28 @@ receiving harness can forward messages to its model provider.
 ## Claude directory
 
 Open the [submission portal](https://claude.ai/directory/manage/new) using the
-publisher's paid Claude account. Select a plugin bundle, supply the repository
-and plugin subdirectory when requested, and use the release version and listing
-text above. Inspect validation findings and complete the review form truthfully.
+publisher's paid Claude account with a connected GitHub account that can push to
+this repository. Select a plugin bundle and enter:
+
+| Field | Value |
+| --- | --- |
+| Repository | `nsssayom/agent-msg` |
+| Plugin path | `plugins/agent-msg` |
+| Branch or tag | `v0.1.1` |
+
+The tag pins the reviewed release; select a new tag explicitly for a future
+update. The plugin's bundled README supplies its listing description. Inspect
+validation findings and complete the review form truthfully.
 Submit for review, record the submission ID, and wait for approval before
 claiming directory availability.
 
-Source: [Anthropic's submission announcement](https://claude.com/blog/build-plugins-for-claude).
+The data-handling form should disclose message and process metadata storage,
+indefinite local retention until the user deletes the journal, and processing
+by the receiving harness and its model provider. The publisher must confirm
+the contact email, intended audience, and compliance acknowledgements in the portal.
+
+Sources: [Anthropic's submission instructions](https://claude.com/docs/plugins/submit)
+and [directory checklist](https://claude.com/docs/plugins/pre-submission-checklist).
 
 ## OpenAI directory
 
