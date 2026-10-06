@@ -6,8 +6,8 @@ not need pip, build tools, or a running server. Python 3.10+ is still required.
 Build tools below are development dependencies only.
 
 1. Update `src/agent_msg/__init__.py` and `pyproject.toml` to the same version.
-   Update versioned download examples in the README. Keep the root `LICENSE`
-   and `src/agent_msg/LICENSE` identical.
+   Update versioned download examples in the README and `docs/INSTALLATION.md`.
+   Keep the root `LICENSE` and `src/agent_msg/LICENSE` identical.
 2. Run `python -m unittest discover -s test -p 'test_*.py' -v`. Normal tests
    are offline; native messaging tests require explicit opt-in and authorized
    test sessions. Record live test coverage separately.
