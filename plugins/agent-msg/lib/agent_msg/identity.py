@@ -39,6 +39,19 @@ def observe_process():
 def identify_sender(observed, agents):
     # Claude's ancestor PID is matched to a live start-time-verified registry.
     ancestors = {p['pid']: index for index, p in enumerate(observed['ancestors'])}
+    # OpenCode can host concurrent sessions in one process. The native plugin
+    # supplies per-tool metadata; require BOTH an ancestor and a live session.
+    oc_session = os.environ.get('AGENT_MSG_OPENCODE_SESSION_ID')
+    oc_instance = os.environ.get('AGENT_MSG_OPENCODE_INSTANCE')
+    oc_matches = [a for a in agents if a['harness'] == 'opencode'
+                  and a.get('pid') in ancestors and a['thread_id'] == oc_session
+                  and a.get('instance') == oc_instance]
+    if len(oc_matches) == 1:
+        agent = oc_matches[0]
+        observed['identity_source'] = 'opencode-plugin-environment-and-process-tree'
+        observed['identity_note'] = 'Per-tool environment claim matched to a live plugin session and ancestor PID; not authentication.'
+        return identity('opencode', name=agent.get('name'), thread_id=agent['thread_id'],
+                        cwd=agent['cwd'], pid=agent['pid'])
     matches = sorted((a for a in agents if a['harness'] == 'claude' and a.get('pid') in ancestors),
                      key=lambda a: ancestors[a['pid']])
     if matches:

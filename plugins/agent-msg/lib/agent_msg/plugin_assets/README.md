@@ -1,6 +1,6 @@
 # agent-msg
 
-agent-msg sends messages between running Claude Code and Codex sessions on the
+agent-msg sends messages between running Claude Code, Codex, and OpenCode sessions on the
 same computer. It discovers local peers, addresses them by exact name or thread
 ID, delivers through each harness's native messaging transport, and records
 messages and correlated replies in a local SQLite journal.
@@ -65,3 +65,7 @@ This is an independent project, not an official product of either harness vendor
 MIT licensed. [Source and documentation](https://github.com/nsssayom/agent-msg).
 [Report an issue](https://github.com/nsssayom/agent-msg/issues) without including
 private journals, tokens, or transcripts.
+
+## OpenCode bridge
+
+Run the bundled launcher with `opencode install --symlink` to install the native OpenCode plugin and skill. Start a new OpenCode process and use a session before discovery. The bridge uses private Unix sockets and the native session SDK; no HTTP listener is required.

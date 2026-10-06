@@ -70,8 +70,9 @@ def reply_message(journal, message_id, text, *, wait=False):
         raise ValueError('reply route does not match original sender')
     if notify and (not destination.get('cwd') or not recipient.get('cwd')):
         raise ValueError('reply requires verified working directories')
-    if notify and Path(destination['cwd']).resolve() != Path(recipient['cwd']).resolve():
-        raise ValueError('reply destination is outside the recipient working directory')
+    # The original journaled request authorizes replying to its sender, even
+    # across workdirs. Each transport re-resolves the exact sender ID AND its
+    # recorded cwd before dispatch; never substitute the responder's cwd.
     mid = str(uuid.uuid4())
     envelope = make(sender, destination, text, reply_route(journal, mid, sender, wait), message_id=mid, in_reply_to=message_id)
     return dispatch(journal, envelope, observed, notify=bool(notify))

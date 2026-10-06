@@ -1,18 +1,18 @@
 {
   "name": "agent-msg",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "MIT",
   "author": {
     "name": "nsssayom"
   },
   "repository": "https://github.com/nsssayom/agent-msg",
   "homepage": "https://github.com/nsssayom/agent-msg",
-  "description": "Local, journaled messages between Claude Code and Codex agents.",
+  "description": "Local, journaled messages between Claude Code, Codex, and OpenCode agents.",
   "skills": "./skills/",
   "interface": {
     "displayName": "agent-msg",
     "shortDescription": "Local agent messaging",
-    "longDescription": "Send messages between running Claude Code and Codex sessions on your computer. Discover peers, select an exact session, send through its native messaging transport, and correlate replies in a local SQLite journal. Inspect conversations and delivery events in an optional read-only browser UI. Requires Python 3.10+ and local access to both harnesses and their sockets. Live transports have been tested on macOS; Linux live delivery and restricted sandbox configurations are not yet validated. Internal harness protocols may change. This plugin does not connect cloud-only sessions to your computer, authenticate agent identity cryptographically, or guarantee that a sent message was read. Prefer native harness tools for subagents and Claude-to-Claude communication.",
+    "longDescription": "Send messages between running Claude Code, Codex, and OpenCode sessions on your computer. Discover peers, select an exact session, send through its native messaging transport, and correlate replies in a local SQLite journal. Inspect conversations and delivery events in an optional read-only browser UI. Requires Python 3.10+ and local access to the selected harnesses and their sockets. Live transports have been tested on macOS; Linux live delivery and restricted sandbox configurations are not yet validated. Internal harness protocols may change. This plugin does not connect cloud-only sessions to your computer, authenticate agent identity cryptographically, or guarantee that a sent message was read. Prefer native harness tools for subagents and Claude-to-Claude communication.",
     "developerName": "nsssayom",
     "category": "Developer Tools",
     "capabilities": [
@@ -24,7 +24,7 @@
     "supportURL": "https://github.com/nsssayom/agent-msg/issues",
     "privacyPolicyURL": "https://github.com/nsssayom/agent-msg/blob/main/PRIVACY.md",
     "defaultPrompt": [
-      "List the Claude Code and Codex sessions running in this working directory.",
+      "List the Claude Code, Codex, and OpenCode sessions running in this working directory.",
       "Ask an agent in the other harness to review my changes and wait for its reply.",
       "Show the recent messages in the local agent-msg journal."
     ],

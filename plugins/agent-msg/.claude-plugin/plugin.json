@@ -1,11 +1,11 @@
 {
   "name": "agent-msg",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "MIT",
   "author": {
     "name": "nsssayom"
   },
   "repository": "https://github.com/nsssayom/agent-msg",
   "homepage": "https://github.com/nsssayom/agent-msg",
-  "description": "Local, journaled messages between Claude Code and Codex agents."
+  "description": "Local, journaled messages between Claude Code, Codex, and OpenCode agents."
 }

@@ -174,6 +174,27 @@ class ServiceTests(unittest.TestCase):
             self.assertEqual(cli.main(['--db',str(self.j.path),'send','nobody','--json']),1)
         self.assertFalse(json.loads(out.getvalue())['ok'])
 
+    def test_cross_workdir_reply_routes_to_original_sender(self):
+        for sending, receiving in [(a,b) for a in ('opencode','claude','codex') for b in ('opencode','claude','codex') if a != b]:
+            sender=protocol.identity(sending,thread_id=sending+'-id',cwd='/source-project')
+            recipient=protocol.identity(receiving,thread_id=receiving+'-id',cwd='/target-project')
+            e=envelope(sender=sender,recipient=recipient,notify=sender);self.j.append(e,{})
+            with patch.object(service,'current_sender',return_value=(recipient,self.observed)),patch.object(transports,'send',return_value={'transport':'test'}) as send:
+                reply=service.reply_message(self.j,e['id'],'cross-directory ACK')
+            self.assertEqual(reply['status'],'sent')
+            self.assertEqual(reply['to'],sender)
+            self.assertEqual(send.call_args.args[0]['cwd'],'/source-project')
+            self.assertEqual(reply['in_reply_to'],e['id'])
+
+    def test_cross_workdir_reply_still_rejects_wrong_recipient(self):
+        sender=protocol.identity('opencode',thread_id='ses_source',cwd='/source')
+        recipient=protocol.identity('claude',thread_id='claude-target',cwd='/target')
+        e=envelope(sender=sender,recipient=recipient,notify=sender);self.j.append(e,{})
+        wrong=protocol.identity('claude',thread_id='different',cwd='/target')
+        with patch.object(service,'current_sender',return_value=(wrong,self.observed)),patch.object(transports,'send') as send:
+            with self.assertRaisesRegex(ValueError,'another agent'):service.reply_message(self.j,e['id'],'no')
+            send.assert_not_called()
+
     def test_plugin_export_and_skill_install_no_overwrite(self):
         dest=Path(self.temp.name)/'plugin';cli.export_plugin(dest)
         for harness in ('claude','codex'):

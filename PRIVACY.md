@@ -38,3 +38,7 @@ must be managed separately.
 Installation through GitHub or a plugin directory is subject to that service's
 own data practices. Do not include private journals, tokens, or transcripts in
 [public bug reports](https://github.com/nsssayom/agent-msg/issues).
+
+## OpenCode
+
+The optional local plugin advertises only sessions observed in its process, via a private same-user Unix socket. Discovery validates registry ownership, permissions, PID and process start time, then reads session IDs, titles, working directories and status through the native SDK. Sends read the current agent/model/variant and recent user-message metadata to preserve settings, then submit an asynchronous text prompt. These reads stay local; only the peer message enters the recipient model context. Per-command session metadata plus process ancestry attributes senders. Registry/socket paths are local configuration, never accepted from message envelopes. No TCP listener or credential access is added.

@@ -10,10 +10,11 @@ Build tools below are development dependencies only.
    and `src/agent_msg/LICENSE` identical.
 2. Run `python -m unittest discover -s test -p 'test_*.py' -v`. Normal tests
    are offline; native messaging tests require explicit opt-in and authorized
-   same-workdir test sessions. Record live test coverage separately.
+   test sessions. Record live test coverage separately.
 3. Run `python -m agent_msg plugin export /tmp/agent-msg-release-plugin` with
    the current package on Python's import path and a new destination directory.
    Replace only the generated `plugins/agent-msg/` tree with this output.
+   The generated bundle includes the OpenCode bridge under `lib/agent_msg/plugin_assets/opencode.js`; `opencode install --symlink` installs it and the skill.
 4. Validate the root marketplace and plugin with
    `claude plugin validate .` and `claude plugin validate plugins/agent-msg`.
    Check that both marketplace entries point to the generated plugin. The root
@@ -27,7 +28,7 @@ Build tools below are development dependencies only.
    Outside the checkout, verify `agent-msg --version`, `plugin export`, and
    the exported launcher's `--version`. Verify the wheel and ZIP contain
    the license, skill, static UI, and plugin assets, with no journals or test results.
-7. Test marketplace add/install for both harnesses using disposable configuration
+7. Test marketplace add/install for Claude and Codex using disposable configuration
    directories (`CLAUDE_CONFIG_DIR` and `CODEX_HOME`). Run the installed bundled
    launcher from outside the checkout. Do not alter normal agent configuration.
    `python test/install_smoke.py --marketplace /absolute/path/to/checkout`
@@ -41,7 +42,7 @@ Build tools below are development dependencies only.
    review are separate; follow [SUBMISSION.md](SUBMISSION.md).
 
 The root marketplace can be pinned to a tag in Codex with
-`codex plugin marketplace add nsssayom/agent-msg --ref v0.1.1`.
+`codex plugin marketplace add nsssayom/agent-msg --ref v0.2.0`.
 Users installing from the default branch follow the marketplace's current files.
 No PyPI release has been made; do not document `pip install agent-msg` as our
 distribution until ownership of that package name and publication are confirmed.

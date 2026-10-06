@@ -47,11 +47,14 @@ def install_skill(harness, destination=None):
     if not (source / 'SKILL.md').is_file():
         raise ValueError('skill is missing from this installation')
     paths = []
-    for name in ('claude', 'codex') if harness == 'both' else (harness,):
+    names = ('claude', 'codex', 'opencode') if harness == 'all' else ('claude', 'codex') if harness == 'both' else (harness,)
+    for name in names:
         if destination:
             base = Path(destination).expanduser() / name
         elif name == 'codex':
             base = Path(os.environ.get('CODEX_HOME', str(Path.home() / '.codex')))
+        elif name == 'opencode':
+            base = opencode_config_dir()
         else:
             base = Path(os.environ.get('CLAUDE_CONFIG_DIR', str(Path.home() / '.claude')))
         target = base / 'skills/agent-msg'
@@ -67,6 +70,41 @@ def install_skill(harness, destination=None):
     return {'installed': [str(path) for path in paths]}
 
 
+def opencode_config_dir():
+    explicit = os.environ.get('OPENCODE_CONFIG_DIR')
+    if explicit:
+        return Path(explicit).expanduser()
+    xdg = os.environ.get('XDG_CONFIG_HOME', '')
+    return (Path(xdg) if Path(xdg).is_absolute() else Path.home() / '.config') / 'opencode'
+
+
+def install_opencode(destination=None, symlink=False):
+    """Install the native bridge and standalone skill; never overwrite customization."""
+    base = Path(destination).expanduser() if destination else opencode_config_dir()
+    package = Path(__file__).resolve().parent
+    plans = [(package / 'plugin_assets/opencode.js', base / 'plugins/agent-msg.js'),
+             (package / 'skill', base / 'skills/agent-msg')]
+    for source, target in plans:
+        if target.is_symlink() and not target.exists():
+            raise ValueError(f'broken existing symlink: {target}')
+        if target.exists():
+            s = source / 'SKILL.md' if source.is_dir() else source
+            t = target / 'SKILL.md' if source.is_dir() else target
+            if not t.is_file() or t.read_bytes() != s.read_bytes():
+                raise ValueError(f'OpenCode installation already exists with different contents: {target}')
+    for source, target in plans:
+        if target.exists():
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if symlink:
+            target.symlink_to(source, target_is_directory=source.is_dir())
+        elif source.is_dir():
+            shutil.copytree(source, target)
+        else:
+            shutil.copyfile(source, target)
+    return {'installed': [str(t) for _, t in plans], 'activation': 'Loaded by new OpenCode processes; use a session to register it.'}
+
+
 def export_plugin(destination):
     """Emit one portable bundle with both harness compatibility manifests."""
     target = Path(destination).expanduser().absolute()
@@ -75,7 +113,7 @@ def export_plugin(destination):
     metadata = {'name': 'agent-msg', 'version': __version__, 'license': 'MIT',
                 'author': {'name': 'nsssayom'}, 'repository': 'https://github.com/nsssayom/agent-msg',
                 'homepage': 'https://github.com/nsssayom/agent-msg',
-                'description': 'Local, journaled messages between Claude Code and Codex agents.'}
+                'description': 'Local, journaled messages between Claude Code, Codex, and OpenCode agents.'}
     assets = Path(__file__).parent / 'plugin_assets'
     interface = json.loads((assets / 'interface.json').read_text())
     target.mkdir(parents=True)
@@ -117,14 +155,14 @@ def export_plugin(destination):
 
 
 def parser():
-    cli = argparse.ArgumentParser(prog='agent-msg', description='Local, journaled messages between Claude Code and Codex.')
+    cli = argparse.ArgumentParser(prog='agent-msg', description='Local, journaled messages between Claude Code, Codex, and OpenCode.')
     cli.add_argument('--version', action='version', version=__version__)
     cli.add_argument('--db', default=str(default_path()), help='SQLite journal path (or use XDG_STATE_HOME)')
     cli.add_argument('--json', action='store_true', help='machine-readable output')
     commands = cli.add_subparsers(dest='command', required=True)
     agents = commands.add_parser('agents', help='discover live agents (current workdir by default)')
     agents.add_argument('--all', action='store_true', help='discover across working directories; does not send')
-    agents.add_argument('--harness', choices=('claude', 'codex'))
+    agents.add_argument('--harness', choices=('claude', 'codex', 'opencode'))
     agents.add_argument('--cwd', default=str(Path.cwd()))
     for name in ('send', 'reply'):
         command = commands.add_parser(name, help='send to a live agent' if name == 'send' else 'reply to a journal message ID')
@@ -152,11 +190,15 @@ def parser():
                     help='browser hostname; server always binds to 127.0.0.1')
     skill = commands.add_parser('skill', help='install the bundled skill explicitly')
     skill.add_argument('action', choices=('install',))
-    skill.add_argument('--harness', choices=('claude', 'codex', 'both'), required=True)
-    skill.add_argument('--dest', help='alternate root; writes ROOT/{claude,codex}/skills/agent-msg')
+    skill.add_argument('--harness', choices=('claude', 'codex', 'opencode', 'both', 'all'), required=True)
+    skill.add_argument('--dest', help='alternate root; writes ROOT/HARNESS/skills/agent-msg')
     plugin = commands.add_parser('plugin', help='export an installable plugin bundle for both harnesses')
     plugin.add_argument('action', choices=('export',))
     plugin.add_argument('destination', help='new directory for the plugin bundle')
+    opencode = commands.add_parser('opencode', help='install the native OpenCode bridge and skill')
+    opencode.add_argument('action', choices=('install',))
+    opencode.add_argument('--dest', help='OpenCode configuration directory')
+    opencode.add_argument('--symlink', action='store_true', help='link to this installed package instead of copying')
     for subparser in commands.choices.values():
         subparser.add_argument('--json', action='store_true', default=argparse.SUPPRESS, help='machine-readable output')
     return cli
@@ -165,6 +207,9 @@ def parser():
 def main(argv=None):
     args = parser().parse_args(argv)
     try:
+        if args.command == 'opencode':
+            output(install_opencode(args.dest, args.symlink), args.json)
+            return 0
         if args.command == 'agents':
             report = transports.discover_agents(args.harness, None if args.all else args.cwd)
             report['db_path'] = str(Path(args.db).expanduser().absolute())

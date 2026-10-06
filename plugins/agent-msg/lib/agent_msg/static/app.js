@@ -20,7 +20,7 @@ function node(tag, className, text) {
   if (text !== undefined) el.textContent = String(text);
   return el;
 }
-function harness(p) { return ['claude', 'codex'].includes(p?.harness) ? p.harness : 'other'; }
+function harness(p) { return ['claude', 'codex', 'opencode'].includes(p?.harness) ? p.harness : 'other'; }
 function agent(p) { return node('span', 'agent ' + harness(p), p?.name || p?.harness || 'Unknown'); }
 function badge(status) {
   const el = node('span', 'status ' + (Object.hasOwn(labels, status) ? status : ''), labels[status] || status);

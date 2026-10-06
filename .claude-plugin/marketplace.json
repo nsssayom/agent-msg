@@ -1,7 +1,7 @@
 {
   "name": "agent-msg",
   "owner": {"name": "nsssayom"},
-  "metadata": {"description": "Local messaging between Claude Code and Codex sessions."},
+  "metadata": {"description": "Local messaging between Claude Code, Codex, and OpenCode sessions."},
   "plugins": [
     {
       "name": "agent-msg",

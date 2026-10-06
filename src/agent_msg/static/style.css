@@ -208,3 +208,6 @@ ol.deliveries time { color: var(--muted); font-variant-numeric: tabular-nums; }
 @media (prefers-reduced-motion: no-preference) {
   .row, .hop .bubble { transition: background-color 120ms ease; }
 }
+
+.message-card.opencode { border-left-color: #b97720; }
+.agent.opencode { color: #b97720; }

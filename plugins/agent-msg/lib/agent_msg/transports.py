@@ -2,7 +2,7 @@
 from contextlib import contextmanager
 from pathlib import Path
 
-from ._native import claude_discovery, claude_push, codex_discovery, codex_push
+from ._native import claude_discovery, claude_push, codex_discovery, codex_push, opencode
 from .protocol import identity
 
 
@@ -54,6 +54,10 @@ def discover_agents(harness=None, cwd=None):
                         'reachable': thread.get('canAcceptDirectInput', True), 'identity_evidence': 'daemon-thread'})
         except (OSError, ValueError, RuntimeError, codex_discovery.RpcError) as error:
             warnings.append(f'Codex discovery: {error}')
+    if harness in (None, 'opencode'):
+        report = opencode.discover()
+        agents.extend(report['agents'])
+        warnings.extend(report['warnings'])
     if cwd is not None:
         root = Path(cwd).expanduser().resolve()
         agents = [a for a in agents if a.get('cwd') and Path(a['cwd']).resolve() == root]
@@ -64,8 +68,8 @@ def resolve_target(target, cwd):
     harness = None
     if ':' in target:
         harness, target = target.split(':', 1)
-        if harness not in ('codex', 'claude'):
-            raise ValueError('target prefix must be codex: or claude:')
+        if harness not in ('codex', 'claude', 'opencode'):
+            raise ValueError('target prefix must be codex:, claude:, or opencode:')
     report = discover_agents(harness, cwd)
     matches = [a for a in report['agents'] if a.get('name') == target or a['thread_id'].lower() == target.lower()]
     if not matches:
@@ -79,6 +83,11 @@ def resolve_target(target, cwd):
 
 
 def send(agent, text, message_id):
+    if agent['harness'] == 'opencode':
+        try:
+            return opencode.deliver(agent, text, message_id)
+        except opencode.Rejected as error:
+            raise NotDispatched(str(error)) from error
     if agent['harness'] == 'claude':
         try:
             thread = claude_push.resolve_target(agent['thread_id'], cwd=agent['cwd'])

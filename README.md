@@ -1,12 +1,13 @@
 # agent-msg
 
-`agent-msg` sends messages between running Claude Code and Codex sessions on the same machine. It provides a Python CLI, plugins for both harnesses, a SQLite message journal, and a local read-only web interface.
+`agent-msg` sends messages between running Claude Code, Codex, and OpenCode sessions on the same machine. It provides a Python CLI, plugins for all three harnesses, a SQLite message journal, and a local read-only web interface.
 
 It handles session discovery, target selection, delivery, and correlated replies. Agents use one command interface instead of implementing each harness's transport themselves.
 
 ## How it works
 
 - **Codex:** connects to the shared app-server daemon. Uses `turn/start` for an idle session and `turn/steer` for a busy session.
+- **OpenCode:** a local plugin bridges a private Unix socket to the native session SDK, including the TUI’s in-process API. It submits normal asynchronous prompts without aborting active work.
 - **Claude Code:** authenticates to the session's local peer-messaging socket and submits a native peer message.
 - **Protocol:** wraps the message with an ID, timestamp, sender and recipient identities, message text, and an `agent-msg` reply route. Replies reference the original message ID.
 - **Journal:** records each message before dispatch, then appends delivery events. Separately records the invoking process's PID, parent PID, UID, executable, workdir, and ancestry.
@@ -18,7 +19,7 @@ Prefer Claude's native tools for Claude-to-Claude messages, and each harness's o
 
 ## Install
 
-Requires Python 3.10+, macOS or Linux, and running local Claude Code or Codex sessions. The package has no Python runtime dependencies. Discovery uses OS process tools, including `lsof` on macOS.
+Requires Python 3.10+, macOS or Linux, and running local Claude Code, Codex, or OpenCode sessions. The package has no Python runtime dependencies. Discovery uses OS process tools, including `lsof` on macOS.
 
 ### Plugins
 
@@ -50,12 +51,32 @@ In **Codex**, use `/plugins` to inspect installation and enabled state. There is
 
 Codex's [app-server API](https://learn.chatgpt.com/docs/app-server) supports `skills/list` with `forceReload: true` and emits `skills/changed` notifications. That refreshes skill discovery; it is not a documented full-plugin reload command for CLI users.
 
+### OpenCode
+
+From an installed CLI or the bundled Python launcher:
+
+```sh
+agent-msg opencode install --symlink
+agent-msg agents --harness opencode --json
+agent-msg send 'opencode:ses_...' 'Please review the change.' --wait
+```
+
+The installer adds `plugins/agent-msg.js` and `skills/agent-msg` to the OpenCode config directory. It respects `OPENCODE_CONFIG_DIR`, otherwise `$XDG_CONFIG_HOME/opencode` or `~/.config/opencode`. `--dest DIR` selects a directory explicitly; `--symlink` follows the installed source. Existing customized files are never overwritten. Start a new OpenCode process to load the bridge, then create or use a session. Installing only the skill does not enable the transport.
+
+The bridge uses the plugin's supplied [native SDK](https://opencode.ai/docs/sdk/) and [hooks](https://opencode.ai/docs/plugins/), without starting an HTTP server or reading credentials. Only sessions observed in that process are advertised; historical sessions are excluded. Exact titles or full session IDs work. If multiple processes host the same session ID, routing is rejected as ambiguous.
+
+Registry files live in `$XDG_STATE_HOME/agent-msg/opencode` (default `~/.local/state/agent-msg/opencode`); private sockets live in `/tmp/agent-msg-UID`. All harnesses must share XDG state settings. An absolute `AGENT_MSG_OPENCODE_RUNTIME_DIR` can override the socket directory. Stale records are ignored after PID/start-time validation. Unix paths must fit the platform's socket limit.
+
+Sender attribution uses per-command session metadata plus a live process ancestor. On OpenCode 1.18.34 the V2 bash tool lacks `shell.env`; the native `tool.execute.before` hook prefixes two exported identity variables, scoped to the command. No shell startup files or permissions are changed. Metadata is an auditable same-user claim, not authentication.
+
+Delivery preserves the current agent, model and variant, leaving system instructions and tool permissions to OpenCode. Busy sessions consume the prompt through their existing loop. API acceptance is not proof of model processing; use `reply` for correlated acknowledgments. Socket drops after dispatch are uncertain and never automatically retried. Receipts deduplicate message IDs within a live bridge process.
+
 ### Python package
 
 With [uv](https://docs.astral.sh/uv/), install the versioned release into an isolated environment and expose `agent-msg` on PATH:
 
 ```sh
-uv tool install https://github.com/nsssayom/agent-msg/releases/download/v0.1.1/agent_msg-0.1.1-py3-none-any.whl
+uv tool install https://github.com/nsssayom/agent-msg/releases/download/v0.2.0/agent_msg-0.2.0-py3-none-any.whl
 agent-msg --version
 agent-msg ui
 ```
@@ -87,9 +108,11 @@ agent-msg show MESSAGE_ID --conversation --json
 agent-msg ui
 ```
 
-Targets are exact session names or full thread IDs, optionally prefixed with `claude:` or `codex:`. Discovery and sends default to the current workdir. `agents --all` lists other workdirs; `send --cwd DIR` selects an exact destination workdir. The caller must have authorization to contact it.
+Targets are exact session names or full thread IDs, optionally prefixed with `claude:`, `codex:`, or `opencode:`. Discovery and sends default to the current workdir. `agents --all` lists other workdirs; `send --cwd DIR` selects an exact destination workdir. The caller must have authorization to contact it.
 
 Messages can be supplied as an argument or through stdin. Add `--json` for structured output. In a plugin-only installation, substitute the bundled `scripts/agent-msg` launcher for `agent-msg`.
+
+Replies can cross working directories: `reply MESSAGE_ID` routes to the original sender recorded in the shared journal and revalidates that live session. For the initial request, use `send --cwd TARGET_DIR` when the peer is in another directory. Do not change to the sender’s directory just to reply.
 
 ## Shared journal
 
@@ -117,7 +140,7 @@ The web interface shows conversations, delivery events, and declared versus obse
 
 Native harness protocols are version-sensitive. Live round trips have been tested on macOS, including a busy Codex peer; Linux live transports and restricted sandbox configurations have not been validated. Sandboxes must permit the journal and native socket access. The package does not disable them.
 
-Process observations are audit information, not cryptographic authentication. Codex attribution uses an environment-provided thread ID; Claude attribution uses a live registry ancestor match. Another process running as the same OS user can alter local state. Message bodies are stored as supplied and may contain sensitive content.
+Process observations are audit information, not cryptographic authentication. Codex attribution uses an environment-provided thread ID; Claude attribution uses a live registry ancestor match; OpenCode matches per-tool session metadata to a live plugin session and process ancestor. Another process running as the same OS user can alter local state. Message bodies are stored as supplied and may contain sensitive content.
 
 ## Development
 
@@ -125,6 +148,8 @@ Process observations are audit information, not cryptographic authentication. Co
 python -m unittest discover -s test -p 'test_*.py' -v
 python -m pip wheel . --no-deps --wheel-dir dist
 agent-msg plugin export ./new-plugin-directory
+# Optional: real OpenCode API test without model inference (new output directory):
+python test/opencode_native_smoke.py --opencode /path/to/opencode --output /path/to/new-smoke-output
 ```
 
 `src/agent_msg/` is the canonical implementation. `plugins/agent-msg/` is a generated bundle; regenerate it after source changes. Tests live in `test/`. Live messaging tests require explicit environment opt-in; ordinary test runs do not contact agents. Browser checks in `test/ui_smoke.py` require Playwright only in the test environment.

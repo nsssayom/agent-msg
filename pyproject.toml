@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent-msg"
-version = "0.1.1"
-description = "Local, journaled messages between Claude Code and Codex sessions"
+version = "0.2.0"
+description = "Local, journaled messages between Claude Code, Codex, and OpenCode sessions"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"

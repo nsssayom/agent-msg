@@ -5,7 +5,7 @@ import uuid
 
 VERSION = 1
 MAX_MESSAGE_BYTES = 128 * 1024
-HARNESS_NAMES = {'claude', 'codex', 'human', 'unknown'}
+HARNESS_NAMES = {'claude', 'codex', 'opencode', 'human', 'unknown'}
 
 
 def now():
